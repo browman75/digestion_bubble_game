@@ -1,0 +1,360 @@
+/* --- 全局與字體設定 --- */
+:root {
+    --bg-color: #fdf2e9; /* 柔和的薑餅色 */
+    --wall-color: #f8d7da; /* 粉色奶油牆 */
+    --accent-color-1: #e9a7a6; /* 糖果粉 */
+    --accent-color-2: #a2d2ff; /* 糖漿藍 */
+    --accent-color-3: #f6e683; /* 奶油黃 */
+    --text-color: #6c4235; /* 巧克力色 */
+    --font-main: 'Noto Sans TC', sans-serif;
+    --font-handwritten: 'Zeyada', cursive;
+}
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    overflow: hidden;
+}
+
+h1, h2, h3 {
+    font-family: var(--font-handwritten);
+    font-weight: bold;
+    font-size: 3.5em;
+    color: var(--text-color);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+h2 { font-size: 2.8em; }
+h3 { font-size: 1.8em; }
+
+/* --- 主遊戲容器 --- */
+#game-container {
+    width: 90vw;
+    max-width: 1000px;
+    height: 90vh;
+    max-height: 700px;
+    background: linear-gradient(135deg, var(--wall-color), #fce2e6);
+    border: 10px solid #fff;
+    border-radius: 30px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15), inset 0 0 15px rgba(255,255,255,0.5);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+
+/* --- 頂部區域 --- */
+.top-section {
+    text-align: center;
+    padding: 10px;
+    border-bottom: 4px dashed rgba(255,255,255,0.7);
+}
+.top-section h1 {
+    margin: 0;
+}
+.learning-text {
+    font-size: 1em;
+    margin: 5px 0;
+}
+
+/* --- 中間互動區 --- */
+.main-interaction-area {
+    flex-grow: 1;
+    display: flex;
+    position: relative;
+}
+.zone {
+    height: 100%;
+    position: relative;
+}
+#macromolecule-zone {
+    width: 40%;
+}
+#cell-zone {
+    width: 60%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* --- 大分子糖果樣式 --- */
+.macromolecule {
+    position: absolute;
+    cursor: pointer;
+    animation: float 6s ease-in-out infinite;
+    transition: transform 0.2s;
+}
+.macromolecule:hover {
+    transform: scale(1.1);
+}
+.starch { content: '🍬-🍬-🍬-🍬'; font-size: 24px; }
+.protein { content: '🍫-🍫-🍫'; font-size: 28px; }
+.lipid { content: '🍯'; font-size: 60px; }
+
+/* --- 細胞杯子蛋糕 --- */
+.cell-cupcake {
+    width: 280px;
+    height: 250px;
+    position: relative;
+}
+.icing {
+    width: 100%;
+    height: 120px;
+    background-color: #ffc8dd;
+    border-radius: 50% 50% 20px 20px / 100px 100px 20px 20px;
+    border: 3px solid var(--accent-color-1);
+    position: absolute;
+    top: 0;
+    z-index: 2;
+}
+.cupcake-base {
+    width: 220px;
+    height: 150px;
+    background-color: #f6e683;
+    position: absolute;
+    bottom: 0;
+    left: 30px;
+    clip-path: polygon(0 0, 100% 0, 85% 100%, 15% 100%);
+    border: 3px solid #e0c56c;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    padding-top: 20px;
+}
+.channel {
+    background: rgba(0,0,0,0.1);
+    padding: 5px 10px;
+    border-radius: 10px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+#glucose-channel { background-color: #a9def9; }
+#amino-acid-channel { background-color: #cfbaf0; }
+#lipid-membrane { background-color: #f7b267; }
+
+/* --- 底部控制區 --- */
+.controls-section {
+    padding: 10px;
+    border-top: 4px dashed rgba(255,255,255,0.7);
+}
+.info-bar {
+    display: flex;
+    justify-content: space-around;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+#combo-display {
+    color: #e56b6f;
+    font-weight: bold;
+}
+.enzyme-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+.enzyme-btn {
+    padding: 10px 20px;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px #999;
+    transition: all 0.1s ease-in-out;
+}
+.enzyme-btn:active {
+    transform: translateY(4px);
+    box-shadow: 0 0 #999;
+}
+#amylase-btn { background-color: #83c5be; box-shadow: 0 4px #5b8a86;}
+#protease-btn { background-color: #fca311; box-shadow: 0 4px #c9820e;}
+#lipase-btn { background-color: #e56b6f; box-shadow: 0 4px #b85659;}
+
+
+/* --- 動畫效果 --- */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
+}
+
+.projectile {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, white, yellow);
+    border-radius: 50%;
+    box-shadow: 0 0 10px yellow;
+    transition: all 0.5s cubic-bezier(0.5, -0.5, 1, 1);
+    z-index: 10;
+}
+
+.score-popup {
+    position: absolute;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #ff5733;
+    animation: fade-up 1s forwards;
+    pointer-events: none;
+}
+@keyframes fade-up {
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-50px); }
+}
+
+.small-molecule {
+    position: absolute;
+    z-index: 5;
+    animation: move-to-cell 1.5s forwards ease-in-out;
+}
+.glucose { content: '🍬'; font-size: 18px; }
+.amino-acid { content: '🍫'; font-size: 18px; }
+.fatty-acid { content: '💧'; font-size: 18px; }
+
+/* 這是一個動態生成的動畫，目標位置會在JS中設定 */
+@keyframes move-to-cell {
+    0% { transform: translate(0, 0); opacity: 1; }
+    100% { transform: translate(var(--tx, 0), var(--ty, 0)); opacity: 0; }
+}
+
+/* --- 彈出視窗 --- */
+#game-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+#popup {
+    background-color: white;
+    padding: 30px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    border: 5px solid var(--accent-color-1);
+}
+#popup h2 { margin-top: 0; }
+#start-game-btn {
+    padding: 12px 25px;
+    font-size: 1.2em;
+    background-color: var(--accent-color-2);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-family: var(--font-main);
+}
+
+/* --- 評量區 --- */
+#assessment-section {
+    width: 90vw;
+    max-width: 1000px;
+    margin-top: 20px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border: 5px solid var(--accent-color-3);
+}
+.hidden { display: none; }
+.question { margin-bottom: 20px; }
+.feedback {
+    min-height: 20px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+.correct { color: green; }
+.incorrect { color: red; }
+
+/* Q1: 拖曳題樣式 */
+.drag-drop-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #f0f8ff;
+    padding: 15px;
+    border-radius: 10px;
+}
+.drag-column, .drop-column {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.draggable, .droptarget {
+    padding: 10px 15px;
+    border: 2px dashed var(--accent-color-2);
+    border-radius: 10px;
+    background-color: #fff;
+    font-weight: bold;
+    text-align: center;
+}
+.draggable { cursor: grab; }
+.droptarget.over { background-color: #a2d2ff; }
+.droptarget.correct-match { background-color: #d4edda; border-color: #c3e6cb; }
+
+/* Q2: 單選題樣式 */
+.mcq-options label {
+    display: block;
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+.mcq-options label:hover {
+    background-color: #f1f1f1;
+}
+
+/* 導航按鈕 */
+.navigation-buttons {
+    text-align: center;
+    margin-top: 20px;
+    border-top: 2px solid #eee;
+    padding-top: 20px;
+}
+.nav-btn {
+    padding: 10px 20px;
+    margin: 0 10px;
+    border-radius: 10px;
+    border: none;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+#restart-btn { background-color: #f6e683; color: var(--text-color); }
+#next-btn { background-color: #b0e0e6; color: #fff; }
+#next-btn:not(.disabled) {
+    background-color: #50c878;
+    animation: pulse 1.5s infinite;
+}
+.disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+}
+.next-page-tip {
+    text-align: center;
+    font-size: 0.9em;
+    color: #999;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
