@@ -28,7 +28,7 @@ body {
 #game-container {
     width: 800px;
     height: 95vh;
-    max-height: 800px;
+    max-height: 700px;
     background: #fff8f0;
     border: 10px solid var(--primary-text);
     border-radius: 30px;
