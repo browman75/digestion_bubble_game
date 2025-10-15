@@ -276,39 +276,53 @@ footer {
 
 .modal-content {
     background: var(--bg-color);
-    padding: 30px;
+    padding: 20px 30px; /* 微調 padding */
     border-radius: 20px;
     border: 5px solid var(--primary-text);
     text-align: center;
     width: 80%;
     max-width: 600px;
     color: var(--primary-text);
-
-    /* === 主要修正點 === */
-    max-height: 85vh; /* 1. 設定最大高度為螢幕高度的85% */
-    overflow-y: auto;  /* 2. 如果內容超出，顯示垂直捲軸 */
+    max-height: 85vh; /* 限制 modal 整體最大高度 */
+    
+    /* === 主要修正點 1 === */
+    display: flex; /* 啟用 Flexbox 佈局 */
+    flex-direction: column; /* 讓子元素垂直排列 */
 }
+
+/* 新增：可滾動的題目區域 */
+.assessment-scroll-area {
+    /* === 主要修正點 2 === */
+    overflow-y: auto; /* 在這個區域啟用垂直捲軸 */
+    flex-grow: 1; /* 讓此區域自動伸展，填滿標題和按鈕之間的剩餘空間 */
+    margin-bottom: 15px; /* 和下方的提示/按鈕保持一點距離 */
+    padding: 5px 15px 5px 5px; /* 增加內距，避免捲軸和文字重疊 */
+    text-align: left; /* 確保裡面的文字是靠左對齊 */
+}
+
 
 .modal-content h2 {
     font-family: 'Fredoka One', cursive;
     font-size: 2.5em;
     margin-top: 0;
+    margin-bottom: 15px;
+    flex-shrink: 0; /* 確保標題不會被壓縮 */
 }
 #final-score-text { font-size: 1.8em; font-weight: bold; }
 #final-comment { font-size: 1.2em; font-style: italic; }
 
 /* --- 評量區塊樣式 --- */
 .assessment-content .question {
-    text-align: left;
+    /* text-align: left; 已移到父層 .assessment-scroll-area */
     margin-bottom: 20px;
     background: #fff8f0;
     padding: 15px;
     border-radius: 10px;
-    border: 2px solid transparent; /* 預設邊框 */
+    border: 2px solid transparent;
     transition: border-color 0.3s;
 }
 .assessment-content .question.incorrect {
-    border-color: var(--incorrect-color); /* 答錯時的邊框 */
+    border-color: var(--incorrect-color);
 }
 
 #drag-drop-question { display: flex; align-items: center; justify-content: space-between; }
@@ -331,7 +345,13 @@ footer {
     background-color: #fdeedc; 
 }
 
-.navigation-buttons { margin-top: 20px; display: flex; gap: 10px; justify-content: center; }
+.navigation-buttons { 
+    margin-top: 10px; /* 微調 margin */
+    display: flex; 
+    gap: 10px; 
+    justify-content: center;
+    flex-shrink: 0; /* 確保按鈕區不會被壓縮 */
+}
 .navigation-buttons button {
     font-family: 'Fredoka One', cursive;
     padding: 10px 20px;
@@ -352,8 +372,10 @@ footer {
     color: var(--incorrect-color); 
     font-weight: bold; 
     font-size: 1em; 
-    margin-top: 15px;
+    margin-top: 5px; /* 微調 margin */
+    margin-bottom: 0;
     min-height: 1.2em;
+    flex-shrink: 0; /* 確保提示區不會被壓縮 */
 }
 
 /* --- 動畫 --- */
@@ -385,7 +407,6 @@ footer {
     70% { transform: scale(1.05); box-shadow: 0 0 10px 15px rgba(255, 202, 40, 0); }
     100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 202, 40, 0); }
 }
-
 @keyframes flash-fade {
     0% {
         opacity: 1;
