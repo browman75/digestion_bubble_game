@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (score > 1000) {
             finalComment.textContent = "不錯喔！細胞吸收到滿滿的養分了！";
         } else {
-            finalComment.textContent = "再接再厲！為細胞補充更多能量吧！";
+            finalComment.textContent = "再接再厲！為細胞補充更多養分吧！";
         }
 
         gameOverModal.style.display = 'flex';
