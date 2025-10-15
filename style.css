@@ -63,7 +63,6 @@ header p {
     border: 4px dashed var(--frosting);
     border-radius: 20px;
     overflow: hidden;
-    min-height: 200px; /* 給遊戲區一個最小高度，避免過度壓縮 */
 }
 
 #macromolecule-area {
@@ -108,7 +107,7 @@ header p {
 /* --- 控制列 --- */
 footer {
     padding-top: 15px;
-    flex-shrink: 0; 
+    flex-shrink: 0; /* 確保 footer 不會被壓縮 */
 }
 #info-bar {
     display: flex;
@@ -376,53 +375,76 @@ footer {
     flex-shrink: 0;
 }
 
-/* --- 動畫 (省略未變更的程式碼以求簡潔) --- */
-@keyframes float { 0% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-20px) rotate(10deg); } 100% { transform: translateY(0px) rotate(0deg); } }
-@keyframes fadeOut { 0% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; display: none; } }
-@keyframes break-apart { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
-@keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
-@keyframes score-up { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-80px); opacity: 0; } }
-@keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 202, 40, 0.7); } 70% { transform: scale(1.05); box-shadow: 0 0 10px 15px rgba(255, 202, 40, 0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 202, 40, 0); } }
-@keyframes flash-fade { 0% { opacity: 1; transform: scale(0.8) translateY(0); } 50% { transform: scale(1.2) translateY(-15px); } 100% { opacity: 0; transform: scale(0.5) translateY(20px); } }
+/* --- 動畫 --- */
+@keyframes float {
+    0% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(10deg); }
+    100% { transform: translateY(0px) rotate(0deg); }
+}
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; display: none; }
+}
+@keyframes break-apart {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.5); opacity: 0; }
+}
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+@keyframes score-up {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-80px); opacity: 0; }
+}
+@keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 202, 40, 0.7); }
+    70% { transform: scale(1.05); box-shadow: 0 0 10px 15px rgba(255, 202, 40, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 202, 40, 0); }
+}
+@keyframes flash-fade {
+    0% {
+        opacity: 1;
+        transform: scale(0.8) translateY(0);
+    }
+    50% {
+        transform: scale(1.2) translateY(-15px);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.5) translateY(20px);
+    }
+}
 
-/* === 主要修正點：更積極的響應式設計，針對矮寬螢幕 === */
-@media (orientation: landscape) and (max-height: 850px) {
+/* === 主要修正點：響應式設計，針對矮寬螢幕 (如 iPad 橫向) === */
+@media (orientation: landscape) and (max-height: 500px) {
     #game-container {
-        padding: 8px; /* 再次縮小整體邊距 */
-        border-width: 5px; /* 縮小邊框 */
-        height: 98vh; /* 稍微拉高，讓內部有更多空間 */
+        padding: 10px; /* 縮小整體邊距 */
     }
     
     h1 {
-        font-size: 1.6em; /* 大幅縮小標題 */
-        margin-bottom: 2px;
+        font-size: 1.8em; /* 縮小標題 */
     }
 
     header p {
-        display: none; /* 在最極端的矮畫面下，直接隱藏說明文字以節省空間 */
+        font-size: 0.8em; /* 縮小說明文字 */
+        line-height: 1.2;
+        margin: 5px 0;
     }
 
     footer {
-        padding-top: 8px; /* 縮小 footer 上方間距 */
+        padding-top: 10px; /* 縮小 footer 上方間距 */
     }
 
     #info-bar {
-        font-size: 1.1em; /* 縮小時間分數文字 */
-        padding: 0 10px 5px; /* 縮小間距 */
+        font-size: 1.2em; /* 縮小時間分數文字 */
+        padding-bottom: 5px;
     }
 
     .enzyme-btn {
-        font-size: 0.9em; /* 大幅縮小按鈕文字 */
-        padding: 6px 15px; /* 大幅縮小按鈕大小 */
-        box-shadow: 0 3px #6b4226;
-    }
-    .enzyme-btn:active {
-        transform: translateY(2px);
-        box-shadow: 0 1px #6b4226;
-    }
-    
-    .channel {
-        font-size: 0.7em; /* 縮小通道文字 */
-        padding: 5px;
+        font-size: 1em; /* 縮小按鈕文字 */
+        padding: 8px 20px; /* 縮小按鈕大小 */
     }
 }
