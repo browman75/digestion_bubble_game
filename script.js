@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 遊戲狀態變數 ---
     let score = 0;
-    let timeLeft = 60;
+    let timeLeft = 40;
     let timerInterval;
     let currentMolecule = null;
     let combo = 0;
