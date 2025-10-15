@@ -235,35 +235,35 @@ document.addEventListener('DOMContentLoaded', () => {
         let allCorrect = true;
         let hints = [];
 
-        // --- 檢查第一題 (拖曳) ---
+        // --- 檢查第二題 (拖曳) ---
         const q1 = document.getElementById('q1');
         const correctDrops = document.querySelectorAll('.droptarget.correct').length;
         if (correctDrops !== 3) {
             allCorrect = false;
             q1.classList.add('incorrect');
-            hints.push("第一題配對不完全喔");
+            hints.push("第二題配對不完全喔");
         } else {
             q1.classList.remove('incorrect');
         }
 
-        // --- 檢查第二題 (單選) ---
+        // --- 檢查第三題 (單選) ---
         const q2 = document.getElementById('q2');
         const selectedAnswer1 = document.querySelector('input[name="digestion-q1"]:checked');
         if (!selectedAnswer1 || selectedAnswer1.value !== 'B') {
             allCorrect = false;
             q2.classList.add('incorrect');
-            hints.push("第二題想一想為什麼大分子需要變小呢");
+            hints.push("第三題想一想剛剛遊戲中，大分子變小就可以通過什麼呢");
         } else {
             q2.classList.remove('incorrect');
         }
 
-        // --- 檢查第三題 (單選) ---
+        // --- 檢查第一題 (單選) ---
         const q3 = document.getElementById('q3');
         const selectedAnswer2 = document.querySelector('input[name="digestion-q2"]:checked');
         if (!selectedAnswer2 || selectedAnswer2.value !== 'C') {
             allCorrect = false;
             q3.classList.add('incorrect');
-            hints.push("第三題，這個過程就叫做「消化」作用喔");
+            hints.push("第一題，這個過程就叫做「消化」作用喔");
         } else {
             q3.classList.remove('incorrect');
         }
