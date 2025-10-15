@@ -8,6 +8,8 @@
     --button-bg-lipid: #fddc6c;  /* 淡黃 */
     --cell-membrane: #d4a778; /* 餅乾色 */
     --frosting: #ffffff; /* 糖霜白 */
+    --correct-color: #28a745; /* 正確的綠色 */
+    --incorrect-color: #dc3545; /* 錯誤的紅色 */
 }
 
 body {
@@ -193,7 +195,7 @@ footer {
     animation: shake 0.3s;
 }
 
-/* === 新增/恢復：小分子樣式 === */
+/* === 小分子樣式 === */
 .micromolecule {
     position: absolute;
     z-index: 10;
@@ -215,8 +217,6 @@ footer {
     background: var(--button-bg-lipid);
     border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
 }
-/* ============================= */
-
 
 .breakdown-text-popup {
     position: absolute;
@@ -241,6 +241,7 @@ footer {
     background: rgba(255, 255, 255, 0.7);
     border-radius: 15px;
     animation: fadeOut 4s forwards;
+    z-index: 20;
 }
 
 #feedback-area {
@@ -298,7 +299,13 @@ footer {
     background: #fff8f0;
     padding: 15px;
     border-radius: 10px;
+    border: 2px solid transparent; /* 預設邊框 */
+    transition: border-color 0.3s;
 }
+.assessment-content .question.incorrect {
+    border-color: var(--incorrect-color); /* 答錯時的邊框 */
+}
+
 #drag-drop-question { display: flex; align-items: center; justify-content: space-between; }
 .drag-column, .drop-column { display: flex; flex-direction: column; gap: 10px; }
 .draggable, .droptarget {
@@ -312,8 +319,12 @@ footer {
 .droptarget.correct { background: #d4edda; border-color: #c3e6cb; }
 .droptarget.over { border-style: solid; background: #cce5ff; }
 
-#mcq-question label { display: block; margin: 5px 0; padding: 5px; border-radius: 5px; cursor: pointer; }
-#mcq-question label:hover { background-color: #fdeedc; }
+#mcq-question-1 label, #mcq-question-2 label { 
+    display: block; margin: 5px 0; padding: 5px; border-radius: 5px; cursor: pointer; 
+}
+#mcq-question-1 label:hover, #mcq-question-2 label:hover { 
+    background-color: #fdeedc; 
+}
 
 .navigation-buttons { margin-top: 20px; display: flex; gap: 10px; justify-content: center; }
 .navigation-buttons button {
@@ -325,13 +336,20 @@ footer {
     transition: background-color 0.3s;
 }
 #restart-btn { background: #a5d6a7; color: white; }
+#check-answers-btn { background: #64b5f6; color: white; } /* 新增按鈕樣式 */
 #next-page-btn { background: #90a4ae; color: #eceff1; }
 #next-page-btn:not(:disabled) {
     background: #ffca28;
     color: var(--primary-text);
     animation: pulse 1.5s infinite;
 }
-#assessment-hint { color: #f44336; font-weight: bold; font-size: 0.9em; }
+#assessment-hint { 
+    color: var(--incorrect-color); 
+    font-weight: bold; 
+    font-size: 1em; 
+    margin-top: 15px;
+    min-height: 1.2em; /* 避免顯示/隱藏時跳動 */
+}
 
 /* --- 動畫 --- */
 @keyframes float {
