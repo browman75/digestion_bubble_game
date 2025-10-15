@@ -179,4 +179,200 @@ footer {
 
 .molecule-text {
     position: absolute;
-    width:
+    width: 100%;
+    text-align: center;
+}
+.starch .molecule-text {
+    transform: translateY(25px);
+}
+
+.macromolecule.hit {
+    animation: break-apart 0.5s forwards;
+}
+.macromolecule.miss {
+    animation: shake 0.3s;
+}
+
+/* === 新增/恢復：小分子樣式 === */
+.micromolecule {
+    position: absolute;
+    z-index: 10;
+}
+.glucose {
+    width: 15px; height: 15px;
+    background: #fff;
+    border: 3px solid var(--button-bg-starch);
+    box-shadow: 0 0 5px #fff;
+    transform: rotate(45deg);
+}
+.amino-acid {
+    width: 15px; height: 15px;
+    background: var(--button-bg-protein);
+    border-radius: 3px;
+}
+.fatty-acid {
+    width: 10px; height: 20px;
+    background: var(--button-bg-lipid);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+}
+/* ============================= */
+
+
+.breakdown-text-popup {
+    position: absolute;
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.5em;
+    color: var(--primary-text);
+    animation: flash-fade 1s forwards;
+    z-index: 15;
+}
+
+
+/* --- 提示訊息 --- */
+#initial-message {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Fredoka One', cursive;
+    font-size: 1.5em;
+    color: var(--primary-text);
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 15px;
+    animation: fadeOut 4s forwards;
+}
+
+#feedback-area {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Fredoka One', cursive;
+    font-size: 3em;
+    color: #ff4757;
+    z-index: 20;
+}
+
+.score-popup {
+    animation: score-up 1s forwards;
+    position: absolute;
+}
+
+/* --- 彈出視窗 (Modal) --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+.modal-content {
+    background: var(--bg-color);
+    padding: 30px;
+    border-radius: 20px;
+    border: 5px solid var(--primary-text);
+    text-align: center;
+    width: 80%;
+    max-width: 600px;
+    color: var(--primary-text);
+}
+.modal-content h2 {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.5em;
+    margin-top: 0;
+}
+#final-score-text { font-size: 1.8em; font-weight: bold; }
+#final-comment { font-size: 1.2em; font-style: italic; }
+
+/* --- 評量區塊樣式 --- */
+.assessment-content .question {
+    text-align: left;
+    margin-bottom: 20px;
+    background: #fff8f0;
+    padding: 15px;
+    border-radius: 10px;
+}
+#drag-drop-question { display: flex; align-items: center; justify-content: space-between; }
+.drag-column, .drop-column { display: flex; flex-direction: column; gap: 10px; }
+.draggable, .droptarget {
+    padding: 10px;
+    border: 2px dashed var(--primary-text);
+    border-radius: 8px;
+    cursor: grab;
+}
+.draggable { background: #fff; }
+.droptarget { background: #eee; }
+.droptarget.correct { background: #d4edda; border-color: #c3e6cb; }
+.droptarget.over { border-style: solid; background: #cce5ff; }
+
+#mcq-question label { display: block; margin: 5px 0; padding: 5px; border-radius: 5px; cursor: pointer; }
+#mcq-question label:hover { background-color: #fdeedc; }
+
+.navigation-buttons { margin-top: 20px; display: flex; gap: 10px; justify-content: center; }
+.navigation-buttons button {
+    font-family: 'Fredoka One', cursive;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+#restart-btn { background: #a5d6a7; color: white; }
+#next-page-btn { background: #90a4ae; color: #eceff1; }
+#next-page-btn:not(:disabled) {
+    background: #ffca28;
+    color: var(--primary-text);
+    animation: pulse 1.5s infinite;
+}
+#assessment-hint { color: #f44336; font-weight: bold; font-size: 0.9em; }
+
+/* --- 動畫 --- */
+@keyframes float {
+    0% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(10deg); }
+    100% { transform: translateY(0px) rotate(0deg); }
+}
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; display: none; }
+}
+@keyframes break-apart {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.5); opacity: 0; }
+}
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+@keyframes score-up {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(-80px); opacity: 0; }
+}
+@keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 202, 40, 0.7); }
+    70% { transform: scale(1.05); box-shadow: 0 0 10px 15px rgba(255, 202, 40, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 202, 40, 0); }
+}
+
+@keyframes flash-fade {
+    0% {
+        opacity: 1;
+        transform: scale(0.8) translateY(0);
+    }
+    50% {
+        transform: scale(1.2) translateY(-15px);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.5) translateY(20px);
+    }
+}
