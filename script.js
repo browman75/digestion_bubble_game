@@ -15,13 +15,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 遊戲狀態變數 ---
     let score = 0;
-    let timeLeft = 60; // 在這裡調整遊戲秒數
+    let timeLeft = 40; // 在這裡調整遊戲秒數
     let timerInterval;
     let currentMolecule = null;
     let combo = 0;
     let gameActive = false;
 
-    // 定義分子屬性，確保所有動畫需要的資訊都在裡面
+    // 定義分子屬性
     const molecules = [
         { name: 'starch', enzyme: 'amylase-btn', displayText: '大分子澱粉', smallShape: 'glucose', smallText: '葡萄糖', channel: '#glucose-channel' },
         { name: 'protein', enzyme: 'protease-btn', displayText: '大分子蛋白質', smallShape: 'amino-acid', smallText: '胺基酸', channel: '#amino-acid-channel' },
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- 遊戲流程控制 ---
     function startGame() {
         score = 0;
-        timeLeft = 60;
+        timeLeft = 40;
         combo = 0;
         gameActive = true;
         updateScore(0);
@@ -41,10 +41,13 @@ document.addEventListener('DOMContentLoaded', () => {
         gameOverModal.style.display = 'none';
         assessmentModal.style.display = 'none';
         
-        // 清除可能殘留的舊計時器
         clearInterval(timerInterval);
         timerInterval = setInterval(updateTimer, 1000);
         
+        // 確保遊戲區域已有分子被清除
+        macromoleculeArea.innerHTML = ''; 
+        macromoleculeArea.appendChild(initialMessage); // 把訊息放回正確位置
+
         setTimeout(spawnMolecule, 1000);
         
         enzymeButtons.forEach(button => {
@@ -115,7 +118,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!gameActive || !currentMolecule) return;
 
         if (buttonId === currentMolecule.enzyme) {
-            // --- 答對 ---
             combo++;
             const points = 100 * combo;
             updateScore(points);
@@ -124,18 +126,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const rect = currentMolecule.element.getBoundingClientRect();
             currentMolecule.element.classList.add('hit');
             
-            // 同時觸發兩種分解動畫
-            showBreakdownTextEffect(rect.left, rect.top, currentMolecule.smallText);
-            createMicromoleculeShapes(rect.left, rect.top, currentMolecule.smallShape, currentMolecule.channel);
+            showBreakdownTextEffect(rect, currentMolecule.smallText);
+            createMicromoleculeShapes(rect, currentMolecule.smallShape, currentMolecule.channel);
 
-            // 移除當前分子並準備生成下一個
             const moleculeToRemove = currentMolecule.element;
+            currentMolecule = null; 
             setTimeout(() => moleculeToRemove.remove(), 500);
-            currentMolecule = null; // 防止連點
             setTimeout(spawnMolecule, 600);
 
         } else {
-            // --- 答錯 ---
             combo = 0;
             currentMolecule.element.classList.add('miss');
             setTimeout(() => {
@@ -162,36 +161,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- 動畫效果 ---
     // 動畫 1: 閃現文字
-    function showBreakdownTextEffect(startX, startY, text) {
-        const gameAreaRect = document.getElementById('game-area').getBoundingClientRect();
+    function showBreakdownTextEffect(startRect, text) {
+        // === 修正點 ===
+        // 取得參考容器的邊界
+        const containerRect = macromoleculeArea.getBoundingClientRect(); 
         for (let i = 0; i < 7; i++) {
             const textEl = document.createElement('div');
             textEl.classList.add('breakdown-text-popup');
             textEl.textContent = text;
             const offsetX = Math.random() * 100 - 50;
             const offsetY = Math.random() * 100 - 50;
-            textEl.style.left = `${startX - gameAreaRect.left + 60 + offsetX}px`;
-            textEl.style.top = `${startY - gameAreaRect.top + 60 + offsetY}px`;
+            // 計算相對於容器的位置
+            textEl.style.left = `${startRect.left - containerRect.left + 60 + offsetX}px`;
+            textEl.style.top = `${startRect.top - containerRect.top + 60 + offsetY}px`;
             macromoleculeArea.appendChild(textEl);
             setTimeout(() => textEl.remove(), 1000);
         }
     }
     
     // 動畫 2: 移動小分子圖案
-    function createMicromoleculeShapes(startX, startY, shapeType, channelSelector) {
+    function createMicromoleculeShapes(startRect, shapeType, channelSelector) {
+        // === 修正點 ===
+        // 取得參考容器的邊界 (遊戲上部 + 整個遊戲區域)
+        const containerRect = macromoleculeArea.getBoundingClientRect();
         const gameAreaRect = document.getElementById('game-area').getBoundingClientRect();
         const channelEl = document.querySelector(channelSelector);
-        if (!channelEl) return; // 安全檢查，防止找不到元素
+        if (!channelEl) return;
         
         const channelRect = channelEl.getBoundingClientRect();
-        const endX = channelRect.left - gameAreaRect.left + channelRect.width / 2;
-        const endY = channelRect.top - gameAreaRect.top + channelRect.height / 2;
+        // 終點位置需要相對於 #macromolecule-area 計算
+        const endX = channelRect.left - containerRect.left + channelRect.width / 2;
+        const endY = channelRect.top - containerRect.top + channelRect.height / 2;
 
         for (let i = 0; i < 5; i++) {
             const microEl = document.createElement('div');
             microEl.classList.add('micromolecule', shapeType);
-            microEl.style.left = `${startX - gameAreaRect.left + 60 + Math.random() * 40 - 20}px`;
-            microEl.style.top = `${startY - gameAreaRect.top + 60 + Math.random() * 40 - 20}px`;
+            // 起點位置也需要相對於容器計算
+            microEl.style.left = `${startRect.left - containerRect.left + 60 + Math.random() * 40 - 20}px`;
+            microEl.style.top = `${startRect.top - containerRect.top + 60 + Math.random() * 40 - 20}px`;
             macromoleculeArea.appendChild(microEl);
 
             setTimeout(() => {
@@ -245,7 +252,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // --- 導航按鈕 ---
     restartBtn.addEventListener('click', () => { 
-        // 使用 startGame() 而不是 reload() 可以提供更流暢的重玩體驗
         assessmentModal.style.display = 'none';
         startGame();
     });
