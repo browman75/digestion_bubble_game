@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function startGame() {
         // 重置狀態
         score = 0;
-        timeLeft = 60;
+        timeLeft = 40;
         combo = 0;
         gameActive = true;
         updateScore(0);
