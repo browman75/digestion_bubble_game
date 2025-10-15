@@ -21,10 +21,11 @@ document.addEventListener('DOMContentLoaded', () => {
     let combo = 0;
     let gameActive = false;
 
+    // 更新：增加 displayText 和 smallText 屬性
     const molecules = [
-        { name: 'starch', enzyme: 'amylase-btn', small: 'glucose', channel: '#glucose-channel' },
-        { name: 'protein', enzyme: 'protease-btn', small: 'amino-acid', channel: '#amino-acid-channel' },
-        { name: 'lipid', enzyme: 'lipase-btn', small: 'fatty-acid', channel: '#lipid-channel' }
+        { name: 'starch', enzyme: 'amylase-btn', displayText: '大分子澱粉', smallText: '葡萄糖' },
+        { name: 'protein', enzyme: 'protease-btn', displayText: '大分子蛋白質', smallText: '胺基酸' },
+        { name: 'lipid', enzyme: 'lipase-btn', displayText: '大分子脂肪', smallText: '脂肪酸' }
     ];
 
     // --- 遊戲流程控制 ---
@@ -101,11 +102,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const moleculeData = molecules[Math.floor(Math.random() * molecules.length)];
         const moleculeEl = document.createElement('div');
         moleculeEl.classList.add('macromolecule', moleculeData.name);
+
+        // 更新：新增文字標籤
+        const textEl = document.createElement('span');
+        textEl.classList.add('molecule-text');
+        textEl.textContent = moleculeData.displayText;
+        moleculeEl.appendChild(textEl);
         
         // 隨機定位
         const areaRect = macromoleculeArea.getBoundingClientRect();
-        const x = Math.random() * (areaRect.width - 80);
-        const y = Math.random() * (areaRect.height - 120); // 留出下方空間
+        const x = Math.random() * (areaRect.width - 120); // 配合變大的分子調整
+        const y = Math.random() * (areaRect.height - 160); // 留出下方空間
         moleculeEl.style.left = `${x}px`;
         moleculeEl.style.top = `${y}px`;
 
@@ -126,7 +133,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // 觸發分解動畫
             const rect = currentMolecule.element.getBoundingClientRect();
             currentMolecule.element.classList.add('hit');
-            createMicromolecules(rect.left, rect.top, currentMolecule.small, currentMolecule.channel);
+            // 更新：調用新的分解動畫函數
+            showBreakdownEffect(rect.left, rect.top, currentMolecule.smallText);
 
             setTimeout(spawnMolecule, 500); // 延遲後產生新分子
         } else {
@@ -154,41 +162,38 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- 動畫效果 ---
-    function createMicromolecules(startX, startY, type, channelSelector) {
+    // 更新：全新的分解動畫函數
+    function showBreakdownEffect(startX, startY, text) {
         const gameAreaRect = document.getElementById('game-area').getBoundingClientRect();
-        const channelEl = document.querySelector(channelSelector);
-        const channelRect = channelEl.getBoundingClientRect();
-        const endX = channelRect.left - gameAreaRect.left + channelRect.width / 2;
-        const endY = channelRect.top - gameAreaRect.top + channelRect.height / 2;
 
-        for (let i = 0; i < 5; i++) {
-            const microEl = document.createElement('div');
-            microEl.classList.add('micromolecule', type);
-            // 初始位置在打碎的大分子周圍
-            microEl.style.left = `${startX - gameAreaRect.left + Math.random() * 40 - 20}px`;
-            microEl.style.top = `${startY - gameAreaRect.top + Math.random() * 40 - 20}px`;
-            macromoleculeArea.appendChild(microEl);
-
-            // 動畫到指定通道
-            setTimeout(() => {
-                microEl.style.transition = 'all 1s ease-in-out';
-                microEl.style.left = `${endX + Math.random() * 20 - 10}px`;
-                microEl.style.top = `${endY}px`;
-                microEl.style.opacity = '0';
-                microEl.style.transform = 'scale(0.5)';
-            }, 100 * i);
-            setTimeout(() => microEl.remove(), 1000 + 100 * i);
+        // 產生多個文字彈出效果
+        for (let i = 0; i < 7; i++) {
+            const textEl = document.createElement('div');
+            textEl.classList.add('breakdown-text-popup');
+            textEl.textContent = text;
+            
+            // 在原大分子位置附近隨機散開
+            const offsetX = Math.random() * 100 - 50;
+            const offsetY = Math.random() * 100 - 50;
+            
+            // 計算絕對位置
+            textEl.style.left = `${startX - gameAreaRect.left + 60 + offsetX}px`;
+            textEl.style.top = `${startY - gameAreaRect.top + 60 + offsetY}px`;
+            
+            macromoleculeArea.appendChild(textEl);
+            
+            // 動畫結束後移除元素
+            setTimeout(() => textEl.remove(), 1000);
         }
     }
     
-    // --- 評量區塊邏輯 ---
+    // --- 評量區塊邏輯 (此區塊無變更) ---
     let assessmentState = {
         q1Correct: false,
         q2Correct: false
     };
 
     function setupAssessment() {
-        // --- 拖曳題邏輯 ---
         const draggables = document.querySelectorAll('.draggable');
         const droptargets = document.querySelectorAll('.droptarget');
         let draggedItem = null;
@@ -217,28 +222,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.target.classList.remove('over');
                 if (e.target.dataset.match === draggedItem.id) {
                     e.target.appendChild(draggedItem);
-                    draggedItem.setAttribute('draggable', 'false'); // 不可再拖曳
+                    draggedItem.setAttribute('draggable', 'false');
                     e.target.classList.add('correct');
                     checkAssessmentCompletion();
                 }
             });
         });
 
-        // --- 單選題邏輯 ---
         const mcqForm = document.getElementById('mcq-question');
         mcqForm.addEventListener('change', checkAssessmentCompletion);
     }
     
     function checkAssessmentCompletion() {
-        // 檢查第一題
         const correctDrops = document.querySelectorAll('.droptarget.correct').length;
         assessmentState.q1Correct = (correctDrops === 3);
 
-        // 檢查第二題
         const selectedAnswer = document.querySelector('input[name="digestion-q"]:checked');
         assessmentState.q2Correct = (selectedAnswer && selectedAnswer.value === 'B');
         
-        // 如果兩題都答對
         if (assessmentState.q1Correct && assessmentState.q2Correct) {
             document.getElementById('assessment-hint').style.display = 'none';
             nextPageBtn.disabled = false;
@@ -247,7 +248,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // --- 導航按鈕 ---
     restartBtn.addEventListener('click', () => {
-        // 簡單地重載頁面以重置所有內容
         window.location.reload();
     });
 
