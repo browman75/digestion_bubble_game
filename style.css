@@ -283,7 +283,12 @@ footer {
     width: 80%;
     max-width: 600px;
     color: var(--primary-text);
+
+    /* === 主要修正點 === */
+    max-height: 85vh; /* 1. 設定最大高度為螢幕高度的85% */
+    overflow-y: auto;  /* 2. 如果內容超出，顯示垂直捲軸 */
 }
+
 .modal-content h2 {
     font-family: 'Fredoka One', cursive;
     font-size: 2.5em;
@@ -336,7 +341,7 @@ footer {
     transition: background-color 0.3s;
 }
 #restart-btn { background: #a5d6a7; color: white; }
-#check-answers-btn { background: #64b5f6; color: white; } /* 新增按鈕樣式 */
+#check-answers-btn { background: #64b5f6; color: white; }
 #next-page-btn { background: #90a4ae; color: #eceff1; }
 #next-page-btn:not(:disabled) {
     background: #ffca28;
@@ -348,7 +353,7 @@ footer {
     font-weight: bold; 
     font-size: 1em; 
     margin-top: 15px;
-    min-height: 1.2em; /* 避免顯示/隱藏時跳動 */
+    min-height: 1.2em;
 }
 
 /* --- 動畫 --- */
