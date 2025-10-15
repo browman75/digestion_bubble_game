@@ -12,10 +12,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const restartBtn = document.getElementById('restart-btn');
     const feedbackArea = document.getElementById('feedback-area');
     const initialMessage = document.getElementById('initial-message');
+    // 新增：評量相關元素
+    const checkAnswersBtn = document.getElementById('check-answers-btn');
+    const assessmentHint = document.getElementById('assessment-hint');
 
     // --- 遊戲狀態變數 ---
     let score = 0;
-    let timeLeft = 40; // 在這裡調整遊戲秒數
+    let timeLeft = 40;
     let timerInterval;
     let currentMolecule = null;
     let combo = 0;
@@ -44,9 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
         clearInterval(timerInterval);
         timerInterval = setInterval(updateTimer, 1000);
         
-        // 確保遊戲區域已有分子被清除
         macromoleculeArea.innerHTML = ''; 
-        macromoleculeArea.appendChild(initialMessage); // 把訊息放回正確位置
+        macromoleculeArea.appendChild(initialMessage);
 
         setTimeout(spawnMolecule, 1000);
         
@@ -160,10 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- 動畫效果 ---
-    // 動畫 1: 閃現文字
     function showBreakdownTextEffect(startRect, text) {
-        // === 修正點 ===
-        // 取得參考容器的邊界
         const containerRect = macromoleculeArea.getBoundingClientRect(); 
         for (let i = 0; i < 7; i++) {
             const textEl = document.createElement('div');
@@ -171,32 +170,24 @@ document.addEventListener('DOMContentLoaded', () => {
             textEl.textContent = text;
             const offsetX = Math.random() * 100 - 50;
             const offsetY = Math.random() * 100 - 50;
-            // 計算相對於容器的位置
             textEl.style.left = `${startRect.left - containerRect.left + 60 + offsetX}px`;
             textEl.style.top = `${startRect.top - containerRect.top + 60 + offsetY}px`;
             macromoleculeArea.appendChild(textEl);
             setTimeout(() => textEl.remove(), 1000);
         }
     }
-    
-    // 動畫 2: 移動小分子圖案
     function createMicromoleculeShapes(startRect, shapeType, channelSelector) {
-        // === 修正點 ===
-        // 取得參考容器的邊界 (遊戲上部 + 整個遊戲區域)
         const containerRect = macromoleculeArea.getBoundingClientRect();
-        const gameAreaRect = document.getElementById('game-area').getBoundingClientRect();
         const channelEl = document.querySelector(channelSelector);
         if (!channelEl) return;
         
         const channelRect = channelEl.getBoundingClientRect();
-        // 終點位置需要相對於 #macromolecule-area 計算
         const endX = channelRect.left - containerRect.left + channelRect.width / 2;
         const endY = channelRect.top - containerRect.top + channelRect.height / 2;
 
         for (let i = 0; i < 5; i++) {
             const microEl = document.createElement('div');
             microEl.classList.add('micromolecule', shapeType);
-            // 起點位置也需要相對於容器計算
             microEl.style.left = `${startRect.left - containerRect.left + 60 + Math.random() * 40 - 20}px`;
             microEl.style.top = `${startRect.top - containerRect.top + 60 + Math.random() * 40 - 20}px`;
             macromoleculeArea.appendChild(microEl);
@@ -212,9 +203,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    // --- 評量區塊邏輯 (此區塊無變更) ---
-    let assessmentState = { q1Correct: false, q2Correct: false };
+    // --- 評量區塊邏輯 ---
     function setupAssessment() {
+        // --- 拖曳題邏輯 ---
         const draggables = document.querySelectorAll('.draggable');
         const droptargets = document.querySelectorAll('.droptarget');
         let draggedItem = null;
@@ -232,21 +223,62 @@ document.addEventListener('DOMContentLoaded', () => {
                     e.target.appendChild(draggedItem);
                     draggedItem.setAttribute('draggable', 'false');
                     e.target.classList.add('correct');
-                    checkAssessmentCompletion();
                 }
             });
         });
-        const mcqForm = document.getElementById('mcq-question');
-        mcqForm.addEventListener('change', checkAssessmentCompletion);
+
+        // --- 檢查答案按鈕事件 ---
+        checkAnswersBtn.addEventListener('click', checkAllAnswers);
     }
-    function checkAssessmentCompletion() {
+    
+    function checkAllAnswers() {
+        let allCorrect = true;
+        let hints = [];
+
+        // --- 檢查第一題 (拖曳) ---
+        const q1 = document.getElementById('q1');
         const correctDrops = document.querySelectorAll('.droptarget.correct').length;
-        assessmentState.q1Correct = (correctDrops === 3);
-        const selectedAnswer = document.querySelector('input[name="digestion-q"]:checked');
-        assessmentState.q2Correct = (selectedAnswer && selectedAnswer.value === 'B');
-        if (assessmentState.q1Correct && assessmentState.q2Correct) {
-            document.getElementById('assessment-hint').style.display = 'none';
+        if (correctDrops !== 3) {
+            allCorrect = false;
+            q1.classList.add('incorrect');
+            hints.push("第一題配對不完全喔");
+        } else {
+            q1.classList.remove('incorrect');
+        }
+
+        // --- 檢查第二題 (單選) ---
+        const q2 = document.getElementById('q2');
+        const selectedAnswer1 = document.querySelector('input[name="digestion-q1"]:checked');
+        if (!selectedAnswer1 || selectedAnswer1.value !== 'B') {
+            allCorrect = false;
+            q2.classList.add('incorrect');
+            hints.push("第二題想一想為什麼大分子需要變小呢");
+        } else {
+            q2.classList.remove('incorrect');
+        }
+
+        // --- 檢查第三題 (單選) ---
+        const q3 = document.getElementById('q3');
+        const selectedAnswer2 = document.querySelector('input[name="digestion-q2"]:checked');
+        if (!selectedAnswer2 || selectedAnswer2.value !== 'C') {
+            allCorrect = false;
+            q3.classList.add('incorrect');
+            hints.push("第三題，這個過程就叫做「消化」作用喔");
+        } else {
+            q3.classList.remove('incorrect');
+        }
+
+        // --- 顯示結果 ---
+        if (allCorrect) {
+            assessmentHint.style.display = 'block';
+            assessmentHint.textContent = '太棒了！全部答對！';
+            assessmentHint.style.color = 'var(--correct-color)';
             nextPageBtn.disabled = false;
+        } else {
+            assessmentHint.style.display = 'block';
+            assessmentHint.textContent = "答錯了，提示：" + hints.join('；'); // 將所有提示合併顯示
+            assessmentHint.style.color = 'var(--incorrect-color)';
+            nextPageBtn.disabled = true;
         }
     }
     
