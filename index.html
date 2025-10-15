@@ -12,7 +12,7 @@
         <header>
             <h1>為什麼要消化？</h1>
             <p>
-                消化作用是將大分子分解成小分子的過程。<br>
+                消化作用是將大分子分解成小分子過程。<br>
                 身體需要將食物中的大分子養分，分解成可穿過細胞膜的小分子，才能吸收利用。
             </p>
         </header>
@@ -55,42 +55,43 @@
         <div class="modal-content assessment-content">
             <h2>學習評量</h2>
 
-            <div class="question" id="q3">
-                <p><b>第一題：</b>將大分子養分轉變成較小分子養分的過程稱為什麼？</p>
-                <form id="mcq-question-2">
-                    <label><input type="radio" name="digestion-q2" value="A"> (A) 攝食</label>
-                    <label><input type="radio" name="digestion-q2" value="B"> (B) 吸收</label>
-                    <label><input type="radio" name="digestion-q2" value="C"> (C) 消化</label>
-                </form>
-            </div>
-            
-            <div class="question" id="q1">
-                <p><b>第二題：</b>請將左邊的大分子，配對到它分解後產生的小分子。</p>
-                <div id="drag-drop-question">
-                    <div class="drag-column">
-                        <div class="draggable" draggable="true" id="drag-starch">澱粉</div>
-                        <div class="draggable" draggable="true" id="drag-protein">蛋白質</div>
-                        <div class="draggable" draggable="true" id="drag-lipid">脂肪</div>
-                    </div>
-                    <canvas id="line-canvas" width="100" height="150"></canvas>
-                    <div class="drop-column">
-                        <div class="droptarget" data-match="drag-protein">胺基酸</div>
-                        <div class="droptarget" data-match="drag-lipid">脂肪酸與甘油</div>
-                        <div class="droptarget" data-match="drag-starch">葡萄糖</div>
+            <div class="assessment-scroll-area">
+                <div class="question" id="q3">
+                    <p><b>第一題：</b>將大分子養分轉變成較小分子養分的過程稱為什麼？</p>
+                    <form id="mcq-question-2">
+                        <label><input type="radio" name="digestion-q2" value="A"> (A) 攝食</label>
+                        <label><input type="radio" name="digestion-q2" value="B"> (B) 吸收</label>
+                        <label><input type="radio" name="digestion-q2" value="C"> (C) 消化</label>
+                    </form>
+                </div>
+                
+                <div class="question" id="q1">
+                    <p><b>第二題：</b>請將左邊的大分子，配對到它分解後產生的小分子。</p>
+                    <div id="drag-drop-question">
+                        <div class="drag-column">
+                            <div class="draggable" draggable="true" id="drag-starch">澱粉糖串</div>
+                            <div class="draggable" draggable="true" id="drag-protein">蛋白質鏈</div>
+                            <div class="draggable" draggable="true" id="drag-lipid">脂質塊</div>
+                        </div>
+                        <canvas id="line-canvas" width="100" height="150"></canvas>
+                        <div class="drop-column">
+                            <div class="droptarget" data-match="drag-protein">胺基酸</div>
+                            <div class="droptarget" data-match="drag-lipid">脂肪酸與甘油</div>
+                            <div class="droptarget" data-match="drag-starch">葡萄糖</div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="question" id="q2">
-                <p><b>第三題：</b>為什麼食物需要「消化」？</p>
-                <form id="mcq-question-1">
-                    <label><input type="radio" name="digestion-q1" value="A"> (A) 為了讓食物變得更好吃。</label>
-                    <label><input type="radio" name="digestion-q1" value="B"> (B) 因為大分子養分要分解成小分子，才能通過細胞膜被吸收。</label>
-                    <label><input type="radio" name="digestion-q1" value="C"> (C) 為了殺死食物中的細菌。</label>
-                    <label><input type="radio" name="digestion-q1" value="D"> (D) 讓肚子有飽足感。</label>
-                </form>
+                <div class="question" id="q2">
+                    <p><b>第三題：</b>為什麼食物需要「消化」？</p>
+                    <form id="mcq-question-1">
+                        <label><input type="radio" name="digestion-q1" value="A"> (A) 為了讓食物變得更好吃。</label>
+                        <label><input type="radio" name="digestion-q1" value="B"> (B) 因為大分子養分要分解成小分子，才能通過細胞膜被吸收。</label>
+                        <label><input type="radio" name="digestion-q1" value="C"> (C) 為了殺死食物中的細菌。</label>
+                        <label><input type="radio" name="digestion-q1" value="D"> (D) 讓肚子有飽足感。</label>
+                    </form>
+                </div>
             </div>
-
             <p id="assessment-hint" style="display: none;"></p>
             <div class="navigation-buttons">
                 <button id="prev-page-btn" disabled>上一頁</button>
