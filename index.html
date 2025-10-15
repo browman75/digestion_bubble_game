@@ -3,100 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>消化學習遊戲：序章 - 為什麼要消化？</title>
+    <title>序章 - 為什麼要消化？</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700&family=Zeyada&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Noto+Sans+TC:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="game-container">
-        <header class="top-section">
-            <h1>序章 - 為什麼要消化？</h1>
-            <p class="learning-text">
-                消化作用是將<b>大分子</b>分解成<b>小分子</b>的過程。<br>
+        <header>
+            <h1>為什麼要消化？</h1>
+            <p>
+                消化作用是將大分子分解成小分子的過程。<br>
                 身體需要將食物中的大分子養分，分解成可穿過細胞膜的小分子，才能吸收利用。
             </p>
         </header>
 
-        <main class="main-interaction-area">
-            <div id="macromolecule-zone" class="zone">
+        <main id="game-area">
+            <div id="macromolecule-area">
+                <div id="initial-message">快使用正確的消化酵素，幫助細胞吸收養分吧！</div>
+            </div>
+            <div id="feedback-area">
                 </div>
-            <div id="cell-zone" class="zone">
-                <div class="cell-cupcake">
-                    <div class="icing"></div>
-                    <div class="cupcake-base">
-                        <div id="glucose-channel" class="channel">葡萄糖專用</div>
-                        <div id="amino-acid-channel" class="channel">胺基酸專用</div>
-                        <div id="lipid-membrane" class="channel">脂肪酸可直接通過</div>
-                    </div>
-                </div>
+            <div id="cell-membrane-area">
+                <div class="channel" id="glucose-channel">葡萄糖專用</div>
+                <div class="channel" id="amino-acid-channel">胺基酸專用</div>
+                <div class="channel" id="lipid-channel">脂肪酸可直接通過</div>
             </div>
         </main>
 
-        <footer class="controls-section">
-            <div class="info-bar">
-                <div id="timer">時間：60 秒</div>
+        <footer>
+            <div id="info-bar">
+                <div id="timer">時間：60</div>
                 <div id="score">分數：0</div>
-                <div id="combo-display"></div>
             </div>
-            <div class="enzyme-buttons">
-                <button id="amylase-btn" class="enzyme-btn" data-enzyme="starch">澱粉酶</button>
-                <button id="protease-btn" class="enzyme-btn" data-enzyme="protein">蛋白酶</button>
-                <button id="lipase-btn" class="enzyme-btn" data-enzyme="lipid">脂肪酶</button>
+            <div id="enzyme-buttons">
+                <button id="amylase-btn" class="enzyme-btn">澱粉酶</button>
+                <button id="protease-btn" class="enzyme-btn">蛋白酶</button>
+                <button id="lipase-btn" class="enzyme-btn">脂肪酶</button>
             </div>
         </footer>
-
-        <div id="game-overlay">
-            <div id="popup">
-                <h2 id="popup-title">準備好了嗎？</h2>
-                <p id="popup-message">快使用正確的消化酵素，幫助細胞吸收養分吧！</p>
-                <button id="start-game-btn">開始遊戲</button>
-            </div>
-        </div>
-
     </div>
 
-    <div id="assessment-section" class="hidden">
-        <h2>學習評量</h2>
-        <div class="assessment-content">
-            <div class="question" id="q1">
-                <h3>第一題：請將左邊的大分子，配對到它分解後產生的小分子。</h3>
-                <div class="drag-drop-container">
+    <div id="game-over-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <h2>時間到！</h2>
+            <p id="final-score-text"></p>
+            <p id="final-comment"></p>
+        </div>
+    </div>
+
+    <div id="assessment-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content assessment-content">
+            <h2>學習評量</h2>
+            
+            <div class="question">
+                <p><b>第一題：</b>請將左邊的大分子，配對到它分解後產生的小分子。</p>
+                <div id="drag-drop-question">
                     <div class="drag-column">
-                        <div class="draggable" draggable="true" data-source="starch">澱粉糖串</div>
-                        <div class="draggable" draggable="true" data-source="protein">蛋白質鏈</div>
-                        <div class="draggable" draggable="true" data-source="lipid">脂質塊</div>
+                        <div class="draggable" draggable="true" id="drag-starch">澱粉糖串</div>
+                        <div class="draggable" draggable="true" id="drag-protein">蛋白質鏈</div>
+                        <div class="draggable" draggable="true" id="drag-lipid">脂質塊</div>
                     </div>
+                    <canvas id="line-canvas" width="100" height="150"></canvas>
                     <div class="drop-column">
-                        <div class="droptarget" data-target="glucose">葡萄糖</div>
-                        <div class="droptarget" data-target="amino-acid">胺基酸</div>
-                        <div class="droptarget" data-target="fatty-acid">脂肪酸與甘油</div>
+                        <div class="droptarget" data-match="drag-protein">胺基酸</div>
+                        <div class="droptarget" data-match="drag-lipid">脂肪酸與甘油</div>
+                        <div class="droptarget" data-match="drag-starch">葡萄糖</div>
                     </div>
                 </div>
-                 <p id="q1-feedback" class="feedback"></p>
             </div>
 
-            <div class="question" id="q2">
-                <h3>第二題：為什麼食物需要「消化」？</h3>
-                <div class="mcq-options">
+            <div class="question">
+                <p><b>第二題：</b>為什麼食物需要「消化」？</p>
+                <form id="mcq-question">
                     <label><input type="radio" name="digestion-q" value="A"> (A) 為了讓食物變得更好吃。</label>
                     <label><input type="radio" name="digestion-q" value="B"> (B) 因為大分子養分要分解成小分子，才能通過細胞膜被吸收。</label>
                     <label><input type="radio" name="digestion-q" value="C"> (C) 為了殺死食物中的細菌。</label>
                     <label><input type="radio" name="digestion-q" value="D"> (D) 讓肚子有飽足感。</label>
-                </div>
-                 <p id="q2-feedback" class="feedback"></p>
+                </form>
             </div>
-        </div>
 
-        <div class="navigation-buttons">
-            <button id="prev-btn" class="nav-btn disabled" disabled>上一頁</button>
-            <button id="restart-btn" class="nav-btn">重新開始</button>
-            <button id="next-btn" class="nav-btn disabled" disabled>下一頁</button>
+             <div class="navigation-buttons">
+                <button id="prev-page-btn" disabled>上一頁</button>
+                <button id="restart-btn">重新開始</button>
+                <button id="next-page-btn" disabled>下一頁</button>
+            </div>
+            <p id="assessment-hint">請先完成評量</p>
         </div>
-        <p class="next-page-tip">請先完成並答對所有評量題目，才能前往下一頁。</p>
     </div>
-
 
     <script src="script.js"></script>
 </body>
