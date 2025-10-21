@@ -289,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     nextPageBtn.addEventListener('click', () => {
         if (!nextPageBtn.disabled) {
-            alert("恭喜你！即將前往下一頁！(這裡是預留的連結位置)");
+            alert("https://browman75.github.io/digestion/3_codepair.html");
         }
     });
 
