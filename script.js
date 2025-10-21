@@ -289,9 +289,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     nextPageBtn.addEventListener('click', () => {
         if (!nextPageBtn.disabled) {
-            alert("https://browman75.github.io/digestion/3_codepair.html");
+            window.location.href = "https://browman75.github.io/digestion/3_codepair.html"
         }
     });
+    
 
     // --- 遊戲自動開始 ---
     startGame();
